@@ -1,3 +1,11 @@
+/*
+ * CSE 12 Homework 8
+ * Francisco Arredondo, Michelle Arteaga
+ * A07614106, A11468765
+ * A00, A00
+ * May 23, 2014
+ */
+
 // AST.java
 // Classes for representing Unicalc Abstract Syntax Tree.
 // Original author: Chris Stone

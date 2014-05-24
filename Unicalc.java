@@ -1,3 +1,11 @@
+/*
+ * CSE 12 Homework 8
+ * Francisco Arredondo, Michelle Arteaga
+ * A07614106, A11468765
+ * A00, A00
+ * May 23, 2014
+ */
+
 // Unicalc.java
 // Original Author: Chris Stone, Harvey Mudd College
 // TODO: Fill in and modify the functions below where the comments

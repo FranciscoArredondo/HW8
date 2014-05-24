@@ -1,3 +1,11 @@
+/*
+ * CSE 12 Homework 8
+ * Francisco Arredondo, Michelle Arteaga
+ * A07614106, A11468765
+ * A00, A00
+ * May 23, 2014
+ */
+
 import java.util.*;
 
 class QuantityDB {
