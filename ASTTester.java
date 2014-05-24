@@ -22,29 +22,81 @@ public class ASTTester extends TestCase {
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
-	protected void setUp() throws Exception {
+	protected void setUp() throws Exception 
+	{
 		super.setUp();
 	}
 
 	/**
-	 * Test method for {@link AST#toString()}.
+	 * Test method for {@link Product#Product(AST, AST)}.
 	 */
-	public void testToString() {
+	public void testProduct() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
-	 * Test method for {@link AST#eval(Map)}.
+	 * Test method for {@link Quotient#Quotient(AST, AST)}.
 	 */
-	public void testEval() {
+	public void testQuotient() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
-	 * Test method for {@link AST#equals(java.lang.Object)}.
+	 * Test method for {@link Sum#Sum(AST, AST)}.
 	 */
-	public void testEquals() {
+	public void testSum() 
+	{
 		fail("Not yet implemented"); // TODO
+	}
+	
+	/**
+	 * Test method for {@link Difference#Difference(AST, AST)}
+	 */
+	public void testDifference()
+	{
+		
+	}
+	
+	/**
+	 * Test method for {@link Power#Power(AST, int)}
+	 */
+	public void testPower()
+	{
+		
+	}
+	
+	/**
+	 * Test method for {@link Negation#Negation(AST)}
+	 */
+	public void testNegation()
+	{
+		
+	}
+	
+	/**
+	 * Test method for {@link Normalize#Normalize(AST)}
+	 */
+	public void testNormalize()
+	{
+		
+	}
+	
+	/**
+	 * Test method for {@link Define#Define(String, AST)}
+	 */
+	public void testDefine()
+	{
+		
+	}
+	
+	/**
+	 * Test method for {@link Value#Value(Quantity)}
+	 */
+	public void testValue()
+	{
+		
 	}
 
 }
