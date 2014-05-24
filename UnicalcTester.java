@@ -29,77 +29,88 @@ public class UnicalcTester extends TestCase {
 	/**
 	 * Test method for {@link Unicalc#S()}.
 	 */
-	public void testS() {
+	public void testS() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#L()}.
 	 */
-	public void testL() {
+	public void testL() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#E()}.
 	 */
-	public void testE() {
+	public void testE() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#P()}.
 	 */
-	public void testP() {
+	public void testP() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#K()}.
 	 */
-	public void testK() {
+	public void testK() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#Q()}.
 	 */
-	public void testQ() {
+	public void testQ() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#R()}.
 	 */
-	public void testR() {
+	public void testR() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#V()}.
 	 */
-	public void testV() {
+	public void testV() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#J()}.
 	 */
-	public void testJ() {
+	public void testJ() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#I()}.
 	 */
-	public void testI() {
+	public void testI() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 
 	/**
 	 * Test method for {@link Unicalc#D()}.
 	 */
-	public void testD() {
+	public void testD() 
+	{
 		fail("Not yet implemented"); // TODO
 	}
 

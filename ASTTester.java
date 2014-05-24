@@ -56,7 +56,7 @@ public class ASTTester extends TestCase {
 	 */
 	public void testDifference()
 	{
-		
+		fail("Not yet implemented"); // TODO
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class ASTTester extends TestCase {
 	 */
 	public void testPower()
 	{
-		
+		fail("Not yet implemented"); // TODO
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public class ASTTester extends TestCase {
 	 */
 	public void testNegation()
 	{
-		
+		fail("Not yet implemented"); // TODO
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class ASTTester extends TestCase {
 	 */
 	public void testNormalize()
 	{
-		
+		fail("Not yet implemented"); // TODO
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class ASTTester extends TestCase {
 	 */
 	public void testDefine()
 	{
-		
+		fail("Not yet implemented"); // TODO
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class ASTTester extends TestCase {
 	 */
 	public void testValue()
 	{
-		
+		fail("Not yet implemented"); // TODO
 	}
 
 }
