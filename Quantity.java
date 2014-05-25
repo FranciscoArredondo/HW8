@@ -232,10 +232,24 @@ public class Quantity
 	 * @param unitsDataBase		the database to units to be searched
 	 * @return					the normalized quantity
 	 */
-	public static Quantity normalizedUnit(String unitName, Map<String,Quantity> unitsDataBase)
+	public static Quantity normalizedUnit(String unitName, Map<String,Quantity> unitDataBase)
 	{
 		return null;
 		
+	}
+	
+	/**
+	 * <p>A (non-static) method normalize that takes in a database in the same 
+	 * format as above and returns a copy of this but in normalized form 
+	 * (with all defined units expanded out into primitive units).</p>
+	 * <p>For example, normalizing the quantity 60 kph, given the above 
+	 * database, should produce the quantity 16.6666... meters per second.</p>
+	 * @param unitDataBase		the specified database of units
+	 * @return					the calling quantity as a new normalized quantity
+	 */
+	public Quantity normalize(Map<String,Quantity>unitDataBase)
+	{
+		return null;
 	}
 	
 	
