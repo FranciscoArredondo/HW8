@@ -207,6 +207,36 @@ public class Quantity
 		return false;
 	}
 	
+	/**
+	 * A method hashCode() that returns an integer, such that equal Quantities 
+	 * always return the same integer.
+	 */
+	public int hashCode()
+	{
+		return this.toString().hashCode();
+	}
+	
+	
+	/**
+	 * <p>A static method normalizedUnit that takes a String 
+	 * (the name of a unit) and a Map<String,Quantity>(a units database). It 
+	 * should create a brand-new normalized Quantity equivalent to 1 of the 
+	 * given unit.</p>
+	 * 
+	 * <p>For example, if db is the database defined above, then 
+	 * Quantity.normalizedUnit("km",db)should return the quantity 1000 meter; 
+	 * Quantity.normalizedUnit("hour",db)should return the quantity 3600second; 
+	 * and Quantity.normalizedUnit("kph",db)would return the quantity 0.27777...
+	 * meters per second.</p>
+	 * @param unitName			name of unit to be normalized
+	 * @param unitsDataBase		the database to units to be searched
+	 * @return					the normalized quantity
+	 */
+	public static Quantity normalizedUnit(String unitName, Map<String,Quantity> unitsDataBase)
+	{
+		return null;
+		
+	}
 	
 	
 	
