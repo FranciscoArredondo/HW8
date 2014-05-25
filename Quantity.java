@@ -69,6 +69,19 @@ public class Quantity
 		
 		this.value = value;
 		
+		// This code is designed to read from a list and add the values into the map
+		for (int i = 0, count = 0; i < numer.size(); ++i)
+		{
+			if (units.containsKey(numer.get(i)))
+				units.put(numer.get(i), ++count);
+			else
+			{
+				count = 0;
+				units.put(numer.get(i), ++count);
+			}
+				
+		}
+		
 		// don't know how the map adt works yet.
 		//TODO: need to set the values for the map
 		
@@ -162,11 +175,12 @@ public class Quantity
 		return null;
 	}
 	
-	@Override
+	
 	/**
 	 * A method toString()that returns the quantity as a String.
 	 * @return		A string representation of a Quantity object
 	 */
+	@Override
 	public String toString()
 	{
 		// XXX You will need to fix these lines to match your fields! 
@@ -188,7 +202,7 @@ public class Quantity
 		return df.format(valueOfTheQuantity) + unitsString.toString();
 	}
 	
-	@Override
+	
 	/**
 	 * A boolean method equals that takes any single Object, and returns true 
 	 * if and only if that object is a Quantity whose units are exactly the same
@@ -198,6 +212,7 @@ public class Quantity
 	 * @param quantity		the specified object to be compared with
 	 * @return				true if the quantities are equal, else return false
 	 */
+	@Override
 	public boolean equals(Object quantity)
 	{
 		if (!(quantity instanceof Quantity))
@@ -252,6 +267,18 @@ public class Quantity
 		return null;
 	}
 	
+	
+	//////////////////////// Private Helper Methods //////////////////////////
+	
+	/**
+	 * 
+	 * @param numerator
+	 * @param denominator
+	 */
+	private void unitsListToMap(List<String> numerator, List<String> denominator)
+	{
+		
+	}
 	
 	
 	
