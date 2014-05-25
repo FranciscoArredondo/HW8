@@ -21,9 +21,9 @@ import java.text.DecimalFormat;
  */
 public class Quantity 
 {
-	// instance variables
-	private double value;
-	private Map<String,Integer> units;
+	// instance variables //TODO: Change back to private
+	public double value;
+	public Map<String,Integer> units;
 	
 	/**
 	 * zero-argument constructor that creates a default quantity of value 1 and
@@ -68,22 +68,8 @@ public class Quantity
 			throw new IllegalArgumentException();
 		
 		this.value = value;
-		
-		// This code is designed to read from a list and add the values into the map
-		for (int i = 0, count = 0; i < numer.size(); ++i)
-		{
-			if (units.containsKey(numer.get(i)))
-				units.put(numer.get(i), ++count);
-			else
-			{
-				count = 0;
-				units.put(numer.get(i), ++count);
-			}
-				
-		}
-		
-		// don't know how the map adt works yet.
-		//TODO: need to set the values for the map
+		this.units = new HashMap<String, Integer>();
+		unitsListToMap(numer, denom);
 		
 	}
 	
@@ -271,13 +257,44 @@ public class Quantity
 	//////////////////////// Private Helper Methods //////////////////////////
 	
 	/**
-	 * 
-	 * @param numerator
-	 * @param denominator
+	 * This method is designed to read in the units from a List<String> and 
+	 * store its non-zero exponent to the units map.
+	 * @param numerator			the units in the numerator
+	 * @param denominator		the units in the denominator
 	 */
 	private void unitsListToMap(List<String> numerator, List<String> denominator)
 	{
+		// adding numerator units
+		for (int i = 0, count = 0; i < numerator.size(); ++i)
+		{
+			if (units.containsKey(numerator.get(i)))
+				units.put(numerator.get(i), ++count);
+			else
+			{
+				count = 0;
+				units.put(numerator.get(i), ++count);
+			}
+				
+		}
 		
+		// adding denominator units
+				for (int i = 0, count = 0; i < denominator.size(); ++i)
+				{
+					if (units.containsKey(denominator.get(i)))
+					{
+						if (units.get(denominator.get(i))-1 == 0)
+							units.remove(denominator.get(i));
+						else
+							units.put(denominator.get(i), units.get(denominator.get(i))-1);
+					}
+					else
+					{
+						count = 0;
+						units.put(denominator.get(i), --count);
+					}
+					
+						
+				}
 	}
 	
 	
