@@ -6,9 +6,11 @@
  * May 23, 2014
  */
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set; // remove later
 import java.util.TreeSet;
 import java.text.DecimalFormat;
 
@@ -87,7 +89,8 @@ public class Quantity
 			throw new IllegalArgumentException();
 		
 		double product = this.value * quantity.value;
-		//TODO: figure out how to multiply units
+		// combine the units numerators
+		
 		return null;
 	}
 	
@@ -282,9 +285,10 @@ public class Quantity
 				{
 					if (units.containsKey(denominator.get(i)))
 					{
+						// if units perfectly cancel then remove them from the map
 						if (units.get(denominator.get(i))-1 == 0)
 							units.remove(denominator.get(i));
-						else
+						else // continue to decrement the exponent
 							units.put(denominator.get(i), units.get(denominator.get(i))-1);
 					}
 					else
@@ -297,8 +301,68 @@ public class Quantity
 				}
 	}
 	
+	/**
+	 * 
+	 * @param map1
+	 * @param map2
+	 */
+	private void addMaps(Map<String,Integer> map1, Map<String,Integer> map2)
+	{
+		Map<String,Integer> copy1 = new HashMap<String,Integer>();
+		Map<String,Integer> copy2 = new HashMap<String,Integer>();
+		Set<String> copy1KeySet;
+		Set<String> copy2KeySet;
+		// create a copy of map1 and map2
+		copy1.putAll(map1);
+		copy2.putAll(map2);
+		// generate key sets for each map to iterate over
+		copy1KeySet = copy1.keySet();
+		copy2KeySet = copy2.keySet();
+		// 
+	}
 	
-	
+	/**
+	 * mini tests
+	 * @param args
+	 */
+	public static void main (String args[])
+	{
+		Quantity test = new Quantity(9.8, Arrays.asList("m", "s", "s"), Arrays.asList("m", "s","s", "s"));
+		Quantity test2 = new Quantity(9.8, Arrays.asList("m", "m", "m"), Arrays.asList("s", "s"));
+		
+		Quantity map1 = new Quantity(9.8, Arrays.asList("a", "b", "C","h", "m", "s"), Arrays.asList("p", "q", "a"));
+		Quantity map2 = new Quantity(9.8, Arrays.asList("a", "x", "z", "m", "d"), Arrays.asList("m", "m", "s"));
+		
+		/*System.out.println(map1.units.entrySet().toString());
+		System.out.println(map2.units.entrySet().toString());
+		System.out.println("\nKey Sets: ");
+		System.out.println("map1: " + map1.units.keySet().toString());
+		System.out.println("map2: "+ map2.units.keySet().toString());
+		
+		Set<String> map1KeySet = map1.units.keySet();
+		map1KeySet.clear();
+		
+		System.out.println(map1.units.entrySet().toString());
+		System.out.println(map2.units.entrySet().toString());
+		System.out.println("\nKey Sets: ");
+		System.out.println("map1: " + map1.units.keySet().toString());
+		System.out.println("map2: "+ map2.units.keySet().toString());*/
+		
+		System.out.println(test.units.entrySet().toString());
+		System.out.println(test2.units.entrySet().toString());
+		System.out.println("\nKey Sets: ");
+		System.out.println("test: " + test.units.keySet().toString());
+		System.out.println("test2: "+ test2.units.keySet().toString());
+		
+		Map<String, Integer> copy = new HashMap<String, Integer>();
+		copy.putAll(test.units);
+		System.out.println("copy: " + copy.entrySet().toString());
+		System.out.println("test: " + test.units.entrySet().toString());
+		
+		copy.clear();
+		System.out.println("copy: " + copy.entrySet().toString());
+		System.out.println("test: " + test.units.entrySet().toString());
+	}
 	
 	
 	
