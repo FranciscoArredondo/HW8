@@ -44,7 +44,6 @@ public class QuantityTester extends TestCase {
 	/**
 	 * Test method for {@link Quantity#hashCode()}.
 	 */
-	
 	public void testHashCode() 
 	{
 		int hashCode1 = sol.hashCode();
