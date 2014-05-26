@@ -8,6 +8,7 @@
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set; // remove later
@@ -302,23 +303,69 @@ public class Quantity
 	}
 	
 	/**
-	 * 
+	 * This method is designed to take in two maps and add their
 	 * @param map1
 	 * @param map2
 	 */
-	private void addMaps(Map<String,Integer> map1, Map<String,Integer> map2)
+	private Map<String,Integer> addMaps(Map<String,Integer> map1, Map<String,Integer> map2)
 	{
 		Map<String,Integer> copy1 = new HashMap<String,Integer>();
 		Map<String,Integer> copy2 = new HashMap<String,Integer>();
+		Map<String,Integer> map3  = new HashMap<String,Integer>();
 		Set<String> copy1KeySet;
 		Set<String> copy2KeySet;
+		int newValue;
 		// create a copy of map1 and map2
 		copy1.putAll(map1);
 		copy2.putAll(map2);
 		// generate key sets for each map to iterate over
 		copy1KeySet = copy1.keySet();
 		copy2KeySet = copy2.keySet();
-		// 
+		// iterate over the first of the two sets
+		Iterator<String> iter1 = copy1KeySet.iterator();
+		
+		
+		// copy everything contained in both lists
+		for (int i = 0; iter1.hasNext(); ++i)
+		{
+			String tmpKey = iter1.next();
+			System.out.println(tmpKey);
+			int tmpValue = copy1.get(tmpKey);
+			// check if map2 contains tmpKey
+			if(copy2.containsKey(tmpKey))
+			{
+				System.out.println("copy2 contains: " + tmpKey+ " from copy1");
+				newValue = tmpValue + copy2.get(tmpKey);
+				System.out.println("new value for " +tmpKey + " is: " + newValue);
+				if (!(newValue == 0))
+				//{
+					map3.put(tmpKey, newValue);
+					// remove any units that cancel out
+					//copy1.remove(tmpKey);
+					//copy2.remove(tmpKey);
+				//}
+				//else
+					//map3.put(tmpKey, newValue);
+			}
+			else
+			{
+				map3.put(tmpKey, tmpValue);
+			}
+			// remove the key from both list
+			iter1.remove();
+			copy2KeySet.remove(tmpKey);	
+		}
+		Iterator<String> iter2 = copy2KeySet.iterator();
+		// copy anything remaining in map2
+		for(int i = 0; iter2.hasNext(); ++i)
+		{
+			String tmpKey = iter2.next();
+			int tmpValue = copy2.get(tmpKey);
+			map3.put(tmpKey, tmpValue);
+			copy2KeySet.remove(tmpKey);	
+		}
+		// remove any keys that map to 0
+		return map3;
 	}
 	
 	/**
@@ -330,8 +377,8 @@ public class Quantity
 		Quantity test = new Quantity(9.8, Arrays.asList("m", "s", "s"), Arrays.asList("m", "s","s", "s"));
 		Quantity test2 = new Quantity(9.8, Arrays.asList("m", "m", "m"), Arrays.asList("s", "s"));
 		
-		Quantity map1 = new Quantity(9.8, Arrays.asList("a", "b", "C","h", "m", "s"), Arrays.asList("p", "q", "a"));
-		Quantity map2 = new Quantity(9.8, Arrays.asList("a", "x", "z", "m", "d"), Arrays.asList("m", "m", "s"));
+		//Quantity map1 = new Quantity(9.8, Arrays.asList("a", "b", "C","h", "m", "s"), Arrays.asList("p", "q", "a"));
+		//Quantity map2 = new Quantity(9.8, Arrays.asList("a", "x", "z", "m", "d"), Arrays.asList("m", "m", "s"));
 		
 		/*System.out.println(map1.units.entrySet().toString());
 		System.out.println(map2.units.entrySet().toString());
@@ -348,7 +395,23 @@ public class Quantity
 		System.out.println("map1: " + map1.units.keySet().toString());
 		System.out.println("map2: "+ map2.units.keySet().toString());*/
 		
-		System.out.println(test.units.entrySet().toString());
+		
+		Map<String, Integer> map1 = new HashMap<String, Integer>();
+		Map<String, Integer> map2 = new HashMap<String, Integer>();
+		map1.put("m",3);
+		map1.put("s",2);
+		map2.put("s", -2);
+		
+		
+		System.out.println("map1: " + map1.entrySet().toString());
+		System.out.println("map2: " + map2.entrySet().toString());
+		Map<String,Integer> map3 = test.addMaps(map1,map2);
+		System.out.println("map3: " + map3.entrySet().toString());
+		
+
+		
+		
+		/*System.out.println(test.units.entrySet().toString());
 		System.out.println(test2.units.entrySet().toString());
 		System.out.println("\nKey Sets: ");
 		System.out.println("test: " + test.units.keySet().toString());
@@ -361,7 +424,7 @@ public class Quantity
 		
 		copy.clear();
 		System.out.println("copy: " + copy.entrySet().toString());
-		System.out.println("test: " + test.units.entrySet().toString());
+		System.out.println("test: " + test.units.entrySet().toString());*/
 	}
 	
 	
