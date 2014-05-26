@@ -44,9 +44,17 @@ public class QuantityTester extends TestCase {
 	/**
 	 * Test method for {@link Quantity#hashCode()}.
 	 */
+	
 	public void testHashCode() 
 	{
-		fail("Not yet implemented"); // TODO
+		int hashCode1 = sol.hashCode();
+		int hashCode2 = sol.hashCode();
+		int hashCode3 = solCopy.hashCode();
+		int hashCode4 = gravity.hashCode();
+		
+		assertEquals(hashCode1, hashCode2);
+		assertEquals(hashCode2, hashCode3);
+		assertTrue(hashCode1 != hashCode4);
 	}
 
 	/**
