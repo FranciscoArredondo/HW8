@@ -112,7 +112,7 @@ public class Quantity
 			throw new IllegalArgumentException();
 		
 		double quotient = this.value/divisor.value;
-		//TODO: figure out how to multiply units
+		
 		return null;
 	}
 	
@@ -414,13 +414,70 @@ public class Quantity
 	}
 	
 	/**
+	 * 
+	 * @param map1
+	 * @param map2
+	 * @return
+	 */
+	private Map<String,Integer> subMaps(Map<String,Integer> map1, Map<String,Integer> map2)
+	{
+		Map<String,Integer> copy1 = new HashMap<String,Integer>();
+		Map<String,Integer> copy2 = new HashMap<String,Integer>();
+		Map<String,Integer> map3  = new HashMap<String,Integer>();
+		Set<String> copy1KeySet;
+		Set<String> copy2KeySet;
+		int newValue;
+		// create a copy of map1 and map2
+		copy1.putAll(map1);
+		copy2.putAll(map2);
+		// generate key sets for each map to iterate over
+		copy1KeySet = copy1.keySet();
+		copy2KeySet = copy2.keySet();
+		// iterate over the first of the two sets
+		Iterator<String> iter1 = copy1KeySet.iterator();
+		
+		
+		// copy everything contained in both lists
+		while(iter1.hasNext())
+		{
+			String tmpKey = iter1.next();
+			int tmpValue = copy1.get(tmpKey);
+			// check if map2 contains tmpKey
+			if(copy2.containsKey(tmpKey))
+			{
+				newValue = tmpValue - copy2.get(tmpKey);
+				if (!(newValue == 0)) // don't add any units that cancel out
+					map3.put(tmpKey, newValue);
+			}
+			else
+			{
+				map3.put(tmpKey, tmpValue);
+			}
+			// remove the key from both list
+			iter1.remove();
+			copy2KeySet.remove(tmpKey);	
+		}
+		
+		// copy anything remaining in map2
+		Iterator<String> iter2 = copy2KeySet.iterator();
+		while(iter2.hasNext())
+		{
+			String tmpKey = iter2.next();
+			int tmpValue = copy2.get(tmpKey);
+			map3.put(tmpKey, tmpValue);
+			copy2KeySet.remove(tmpKey);	
+		}
+		return map3;
+	}
+	
+	/**
 	 * mini tests
 	 * @param args
 	 */
 	public static void main (String args[])
 	{
 		Quantity test = new Quantity(9.8, Arrays.asList("m"), Arrays.asList("s", "s"));
-		Quantity test2 = new Quantity(2, Arrays.asList("m"), Arrays.asList("s", "s"));
+		Quantity test2 = new Quantity(2, Arrays.asList("s", "s"), Arrays.asList("m"));
 		
 		Quantity ans = test.mul(test2);
 		System.out.println(ans.toString());
@@ -443,20 +500,20 @@ public class Quantity
 		System.out.println("map2: "+ map2.units.keySet().toString());*/
 		
 		
-		/*Map<String, Integer> map1 = new HashMap<String, Integer>();
+		Map<String, Integer> map1 = new HashMap<String, Integer>();
 		Map<String, Integer> map2 = new HashMap<String, Integer>();
-		map1.put("m",2);
+		map1.put("m",1);
 		map1.put("s",2);
-		map2.put("s", -2);
-		map2.put("m", -4);
+		map2.put("s",2);
+		map2.put("m",1);
 		
 		
 		System.out.println("map1: " + map1.entrySet().toString());
 		System.out.println("map2: " + map2.entrySet().toString());
-		Map<String,Integer> map3 = test.addMaps(map1,map2);
+		Map<String,Integer> map3 = test.subMaps(map1,map2);
 		System.out.println("map3: " + map3.entrySet().toString());
 		
-		System.out.println(test.getDenominatorUnits(map3).toString());*/
+		System.out.println(test.getDenominatorUnits(map3).toString());
 
 		
 		
