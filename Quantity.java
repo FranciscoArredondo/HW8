@@ -6,6 +6,7 @@
  * May 23, 2014
  */
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -90,9 +91,11 @@ public class Quantity
 			throw new IllegalArgumentException();
 		
 		double product = this.value * quantity.value;
-		// combine the units numerators
+		Map<String,Integer> newUnits = addMaps(this.units, quantity.units);
+		List<String> numer = getNumeratorUnits(newUnits);
+		List<String> denom = getDenominatorUnits(newUnits);
 		
-		return null;
+		return new Quantity(product, numer, denom);
 	}
 	
 	/**
@@ -303,7 +306,9 @@ public class Quantity
 	}
 	
 	/**
-	 * This method is designed to take in two maps and add their
+	 * This method is designed to take in two maps and add all their keys into
+	 * a new map, any values associated with keys contained in both maps will
+	 * be added together.
 	 * @param map1
 	 * @param map2
 	 */
@@ -359,14 +364,66 @@ public class Quantity
 	}
 	
 	/**
+	 * This method is designed to retrieve the units of the numerator from a 
+	 * specified map, and return them as a list.
+	 * @param map
+	 * @return
+	 */
+	private List<String> getNumeratorUnits(Map<String,Integer> map)
+	{
+		Set<String> mapKeySet = map.keySet();
+		Iterator<String> iter = mapKeySet.iterator();
+		List<String> toReturn = new ArrayList<String>();
+		
+		while(iter.hasNext())
+		{
+			String tmpKey = iter.next();
+			int count = map.get(tmpKey);
+			while(count > 0)
+			{
+				toReturn.add(tmpKey);
+				--count;
+			}
+		}
+		return toReturn;
+	}
+	
+	/**
+	 * This method is designed to retrieve the units of the denominator from a 
+	 * specified map, and return them as a list.
+	 * @param map
+	 * @return
+	 */
+	private List<String> getDenominatorUnits(Map<String,Integer> map)
+	{
+		Set<String> mapKeySet = map.keySet();
+		Iterator<String> iter = mapKeySet.iterator();
+		List<String> toReturn = new ArrayList<String>();
+		
+		while(iter.hasNext())
+		{
+			String tmpKey = iter.next();
+			int count = map.get(tmpKey);
+			while(count < 0)
+			{
+				toReturn.add(tmpKey);
+				++count;
+			}
+		}
+		return toReturn;
+	}
+	
+	/**
 	 * mini tests
 	 * @param args
 	 */
 	public static void main (String args[])
 	{
-		Quantity test = new Quantity(9.8, Arrays.asList("m", "s", "s"), Arrays.asList("m", "s","s", "s"));
-		Quantity test2 = new Quantity(9.8, Arrays.asList("m", "m", "m"), Arrays.asList("s", "s"));
+		Quantity test = new Quantity(9.8, Arrays.asList("m"), Arrays.asList("s", "s"));
+		Quantity test2 = new Quantity(2, Arrays.asList("m"), Arrays.asList("s", "s"));
 		
+		Quantity ans = test.mul(test2);
+		System.out.println(ans.toString());
 		//Quantity map1 = new Quantity(9.8, Arrays.asList("a", "b", "C","h", "m", "s"), Arrays.asList("p", "q", "a"));
 		//Quantity map2 = new Quantity(9.8, Arrays.asList("a", "x", "z", "m", "d"), Arrays.asList("m", "m", "s"));
 		
@@ -386,12 +443,12 @@ public class Quantity
 		System.out.println("map2: "+ map2.units.keySet().toString());*/
 		
 		
-		Map<String, Integer> map1 = new HashMap<String, Integer>();
+		/*Map<String, Integer> map1 = new HashMap<String, Integer>();
 		Map<String, Integer> map2 = new HashMap<String, Integer>();
-		map1.put("m",3);
+		map1.put("m",2);
 		map1.put("s",2);
 		map2.put("s", -2);
-		map2.put("m", -3);
+		map2.put("m", -4);
 		
 		
 		System.out.println("map1: " + map1.entrySet().toString());
@@ -399,6 +456,7 @@ public class Quantity
 		Map<String,Integer> map3 = test.addMaps(map1,map2);
 		System.out.println("map3: " + map3.entrySet().toString());
 		
+		System.out.println(test.getDenominatorUnits(map3).toString());*/
 
 		
 		
