@@ -12,7 +12,6 @@ import java.util.Arrays;
 /**
  * @author Francisco Arredondo
  * @author Michelle Arteaga
- *
  */
 public class QuantityTester extends TestCase {
 
@@ -61,7 +60,8 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testQuantity() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity test = new Quantity();
+		assertEquals("1.0", test.toString());
 	}
 
 	/**
@@ -69,7 +69,8 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testQuantityCopy() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity test = new Quantity(gravity);
+		assertEquals("9.8 m s^-2", test.toString());
 	}
 
 	/**
