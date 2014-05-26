@@ -78,7 +78,8 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testQuantityThreeArgs() 
 	{
-		
+		Quantity test = new Quantity (15, Arrays.asList("min", "min", "s"), Arrays.asList("m", "J"));
+		assertEquals("15.0 J^-1 m^-1 min^2 s", test.toString());
 	}
 
 	/**
