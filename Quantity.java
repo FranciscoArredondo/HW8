@@ -112,8 +112,11 @@ public class Quantity
 			throw new IllegalArgumentException();
 		
 		double quotient = this.value/divisor.value;
+		Map<String,Integer> newUnits = subMaps(this.units, divisor.units);
+		List<String> numer = getNumeratorUnits(newUnits);
+		List<String> denom = getDenominatorUnits(newUnits);
 		
-		return null;
+		return new Quantity(quotient, numer, denom);
 	}
 	
 	/**
@@ -124,7 +127,7 @@ public class Quantity
 	 */
 	public Quantity pow(int power)
 	{
-		//TODO: figure out how to handle units
+		
 		return null;
 	}
 	
@@ -414,7 +417,9 @@ public class Quantity
 	}
 	
 	/**
-	 * 
+	 * This method is designed to take in two maps and subtract all their keys 
+	 * into a new map, any values associated with keys contained in both maps 
+	 * will be subtracted from one another.
 	 * @param map1
 	 * @param map2
 	 * @return
@@ -476,10 +481,12 @@ public class Quantity
 	 */
 	public static void main (String args[])
 	{
-		Quantity test = new Quantity(9.8, Arrays.asList("m"), Arrays.asList("s", "s"));
-		Quantity test2 = new Quantity(2, Arrays.asList("s", "s"), Arrays.asList("m"));
+		Quantity test = new Quantity(9.8, Arrays.asList("m", "s", "s"), Arrays.asList("m","s", "s"));
+		Quantity test2 = new Quantity(2, Arrays.asList("s", "s", "m"), Arrays.asList("m","s","s"));
 		
-		Quantity ans = test.mul(test2);
+		//Quantity ans = test.mul(test2);
+		Quantity ans = test.div(test2);
+		
 		System.out.println(ans.toString());
 		//Quantity map1 = new Quantity(9.8, Arrays.asList("a", "b", "C","h", "m", "s"), Arrays.asList("p", "q", "a"));
 		//Quantity map2 = new Quantity(9.8, Arrays.asList("a", "x", "z", "m", "d"), Arrays.asList("m", "m", "s"));
@@ -500,7 +507,7 @@ public class Quantity
 		System.out.println("map2: "+ map2.units.keySet().toString());*/
 		
 		
-		Map<String, Integer> map1 = new HashMap<String, Integer>();
+		/*Map<String, Integer> map1 = new HashMap<String, Integer>();
 		Map<String, Integer> map2 = new HashMap<String, Integer>();
 		map1.put("m",1);
 		map1.put("s",2);
@@ -513,7 +520,7 @@ public class Quantity
 		Map<String,Integer> map3 = test.subMaps(map1,map2);
 		System.out.println("map3: " + map3.entrySet().toString());
 		
-		System.out.println(test.getDenominatorUnits(map3).toString());
+		System.out.println(test.getDenominatorUnits(map3).toString());*/
 
 		
 		

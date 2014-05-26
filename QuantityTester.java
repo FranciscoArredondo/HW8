@@ -7,6 +7,7 @@
  */
 
 import junit.framework.TestCase;
+import java.util.Arrays;
 
 /**
  * @author Francisco Arredondo
@@ -15,12 +16,15 @@ import junit.framework.TestCase;
  */
 public class QuantityTester extends TestCase {
 
+	//Instance Variables
+	Quantity test; 
+	
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception 
 	{
-		super.setUp();
+		test = new Quantity(9.8, Arrays.asList("m", "s", "s"), Arrays.asList("m", "s","s", "s"));
 	}
 
 	/**
@@ -52,7 +56,12 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testQuantityDoubleListOfStringListOfString() 
 	{
-		fail("Not yet implemented"); // TODO
+		assertEquals(9.8, test.value);
+		assertEquals(null, test.units.get("m"));
+		assertEquals(new Integer(-1), test.units.get("s"));
+		System.out.println(test.units.entrySet().toArray()[0]);
+		
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
