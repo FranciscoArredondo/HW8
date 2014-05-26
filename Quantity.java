@@ -128,7 +128,7 @@ public class Quantity
 	 */
 	public Quantity pow(int power)
 	{
-		double newValue = this.value*this.value;
+		double newValue = Math.pow(value, power);
 		Map<String,Integer> newUnits = expMap(power,this.units);
 		List<String> numer = getNumeratorUnits(newUnits);
 		List<String> denom = getDenominatorUnits(newUnits);
@@ -486,12 +486,15 @@ public class Quantity
 		
 		// copy anything remaining in map2
 		Iterator<String> iter2 = copy2KeySet.iterator();
+		System.out.println("iter2 has next: " + iter2.hasNext());
+		System.out.println("KeySet2: " + copy2KeySet.toString());
 		while(iter2.hasNext())
 		{
 			String tmpKey = iter2.next();
+			System.out.println("tmpKey: " + tmpKey);
 			int tmpValue = copy2.get(tmpKey);
 			map3.put(tmpKey, tmpValue);
-			copy2KeySet.remove(tmpKey);	
+			copy2.remove(tmpKey);	
 		}
 		return map3;
 	}

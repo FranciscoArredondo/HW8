@@ -17,14 +17,28 @@ import java.util.Arrays;
 public class QuantityTester extends TestCase {
 
 	//Instance Variables
-	Quantity test; 
+	Quantity gravity;
+	Quantity velocity;
+	Quantity velocity2;
+	Quantity sol;
+	Quantity solCopy;
+	Quantity plank;
+	Quantity plank2;
+	Quantity avogado;
 	
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception 
 	{
-		test = new Quantity(9.8, Arrays.asList("m", "s", "s"), Arrays.asList("m", "s","s", "s"));
+		gravity = new Quantity(9.8, Arrays.asList("m"), Arrays.asList("s","s"));
+		velocity = new Quantity(10, Arrays.asList("m"), Arrays.asList("s"));
+		velocity2 = new Quantity(100, Arrays.asList("m"), Arrays.asList("s"));
+		sol = new Quantity(2.99, Arrays.asList("m"), Arrays.asList("s"));
+		solCopy = new Quantity(2.99, Arrays.asList("m"), Arrays.asList("s"));
+		plank = new Quantity(626, Arrays.asList("J", "s"), Arrays.asList(""));
+		plank2 = new Quantity(26, Arrays.asList("J", "s"), Arrays.asList(""));
+		avogado = new Quantity(602, Arrays.asList(""), Arrays.asList("mol"));
 	}
 
 	/**
@@ -46,7 +60,7 @@ public class QuantityTester extends TestCase {
 	/**
 	 * Test method for {@link Quantity#Quantity(Quantity)}.
 	 */
-	public void testQuantityQuantity() 
+	public void testQuantityCopy() 
 	{
 		fail("Not yet implemented"); // TODO
 	}
@@ -54,14 +68,9 @@ public class QuantityTester extends TestCase {
 	/**
 	 * Test method for {@link Quantity#Quantity(double, java.util.List, java.util.List)}.
 	 */
-	public void testQuantityDoubleListOfStringListOfString() 
+	public void testQuantityThreeArgs() 
 	{
-		assertEquals(9.8, test.value);
-		assertEquals(null, test.units.get("m"));
-		assertEquals(new Integer(-1), test.units.get("s"));
-		System.out.println(test.units.entrySet().toArray()[0]);
 		
-		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -69,7 +78,9 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testMul() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity product = velocity.mul(gravity);
+		Quantity expected = new Quantity (98, Arrays.asList("m","m"), Arrays.asList("s","s","s"));
+		assertEquals(expected,product);
 	}
 
 	/**
@@ -77,7 +88,12 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testDiv() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity quotient = velocity.div(plank);
+		Quantity expected = new Quantity(0.6626, Arrays.asList("m"), Arrays.asList("J","s","s"));
+		//System.out.println(quotient.toString());
+		//System.out.println(expected.toString());
+		assertEquals(expected,quotient);
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -85,7 +101,9 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testPow() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity pow = gravity.pow(3);
+		Quantity expected = new Quantity(941.192, Arrays.asList("m","m","m"), Arrays.asList("s","s","s","s","s","s"));
+		assertEquals(expected,pow);
 	}
 
 	/**
@@ -93,7 +111,26 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testAdd() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity sum = velocity.add(velocity2);
+		Quantity expected = new Quantity(110, Arrays.asList("m"), Arrays.asList("s"));
+		assertEquals(expected,sum);
+	}
+	
+	/**
+	 * Test method for {@link Quantity#add(Quantity)}.
+	 * Testing for exception thrown.
+	 */
+	public void testAddEception()
+	{
+		try
+		{
+			Quantity sum = velocity.add(gravity);
+			fail("Should have thrown an IllegalArgumentException.");
+		}
+		catch (IllegalArgumentException e)
+		{
+			//normal
+		}
 	}
 
 	/**
@@ -101,7 +138,26 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testSub() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity diff = plank.sub(plank2);
+		Quantity expected = new Quantity(600, Arrays.asList("J","s"), Arrays.asList(""));
+		assertEquals(expected, diff);
+	}
+	
+	/**
+	 * Test method for {@link Quantity#sub(Quantity)}.
+	 * Testing for exception thrown.
+	 */
+	public void testSubEception()
+	{
+		try
+		{
+			Quantity diff = velocity.sub(gravity);
+			fail("Should have thrown an IllegalArgumentException.");
+		}
+		catch (IllegalArgumentException e)
+		{
+			//normal
+		}
 	}
 
 	/**
@@ -109,7 +165,9 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testNegate() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity neg = gravity.negate();
+		Quantity expected = new Quantity(-9.8, Arrays.asList("m"), Arrays.asList("s","s"));
+		assertEquals(expected,neg);
 	}
 
 	/**
@@ -117,7 +175,10 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testEqualsObject() 
 	{
-		fail("Not yet implemented"); // TODO
+		boolean fail = plank.equals(gravity);
+		boolean pass = sol.equals(solCopy);
+		assertEquals(false, fail);
+		assertEquals(true, pass);
 	}
 
 	/**
