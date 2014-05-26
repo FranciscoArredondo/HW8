@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set; // remove later
 import java.util.TreeSet;
 import java.text.DecimalFormat;
@@ -128,8 +129,11 @@ public class Quantity
 	public Quantity pow(int power)
 	{
 		double newValue = this.value*this.value;
+		Map<String,Integer> newUnits = expMap(power,this.units);
+		List<String> numer = getNumeratorUnits(newUnits);
+		List<String> denom = getDenominatorUnits(newUnits);
 		
-		return null;
+		return new Quantity(newValue, numer, denom);
 	}
 	
 	/**
@@ -142,8 +146,13 @@ public class Quantity
 	 */
 	public Quantity add(Quantity quantity)
 	{
-		// check if the units do not match throw an IllegalArgumentException
-		return null;
+		if(quantity == null || !quantity.units.equals(this.units))
+			throw new IllegalArgumentException();
+		double sum = this.value + quantity.value;
+		List<String> numer = getNumeratorUnits(this.units);
+		List<String> denom = getDenominatorUnits(this.units);
+		
+		return new Quantity(sum, numer, denom);
 	}
 	
 	
@@ -158,8 +167,13 @@ public class Quantity
 	 */
 	public Quantity sub(Quantity quantity)
 	{
-		// check if the units do not match throw an IllegalArgumentException
-		return null;
+		if(quantity == null || !quantity.units.equals(this.units))
+			throw new IllegalArgumentException();
+		double diff = this.value - quantity.value;
+		List<String> numer = getNumeratorUnits(this.units);
+		List<String> denom = getDenominatorUnits(this.units);
+		
+		return new Quantity(diff, numer, denom);
 	}
 	
 	/**
@@ -169,7 +183,11 @@ public class Quantity
 	 */
 	public Quantity negate()
 	{
-		return null;
+		double neg = -(this.value);
+		List<String> numer = getNumeratorUnits(this.units);
+		List<String> denom = getDenominatorUnits(this.units);
+		
+		return new Quantity(neg, numer, denom);
 	}
 	
 	
@@ -212,11 +230,13 @@ public class Quantity
 	@Override
 	public boolean equals(Object quantity)
 	{
-		if (!(quantity instanceof Quantity))
+		if (!(quantity instanceof Quantity)|| !((Quantity)quantity).units.equals(this.units))
 			return false;
-		// compare the calling quantity to the specified quantity using their string representations
 		
-		return false;
+		String string1 = this.toString();
+		String string2 = quantity.toString();
+		
+		return string1.equals(string2);
 	}
 	
 	/**
@@ -488,7 +508,6 @@ public class Quantity
 		Map<String,Integer> copy1 = new HashMap<String,Integer>();
 		Map<String,Integer> toReturn  = new HashMap<String,Integer>();
 		Set<String> copy1KeySet;
-		int newValue;
 		// create a copy of map1
 		copy1.putAll(map1);
 		// generate key sets for each map to iterate over
@@ -509,6 +528,10 @@ public class Quantity
 		return toReturn;
 	}
 	
+	private boolean equalUnits(Quantity quantity) //TODO:Remove this method if not used
+	{
+		return quantity.units.equals(this.units);
+	}
 	
 	/**
 	 * mini tests
@@ -516,9 +539,13 @@ public class Quantity
 	 */
 	public static void main (String args[])
 	{
-		Quantity test = new Quantity(9.8, Arrays.asList("m", "s", "s"), Arrays.asList("m","s", "s"));
+		Quantity test = new Quantity(9.8, Arrays.asList("m","m", "s", "s"), Arrays.asList("m","s","s"));
 		Quantity test2 = new Quantity(2, Arrays.asList("m"), Arrays.asList("s","s"));
 		
+		Quantity quant1 = new Quantity(5, Arrays.asList("m"), Arrays.asList("s","s"));
+		Quantity quant2 = new Quantity(5, Arrays.asList("m"), Arrays.asList("s","s"));
+		
+		System.out.println(quant1.equals(test));
 		//Quantity ans = test.mul(test2);
 		//Quantity ans = test.div(test2);
 		Map<String, Integer> ans = test.expMap(3, test2.units);
