@@ -9,10 +9,6 @@
 import junit.framework.TestCase;
 
 /**
- * 
- */
-
-/**
  * @author Francisco Arredondo
  * @author Michelle Arteaga
  *
