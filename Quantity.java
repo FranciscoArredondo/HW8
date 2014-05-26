@@ -127,6 +127,7 @@ public class Quantity
 	 */
 	public Quantity pow(int power)
 	{
+		double newValue = this.value*this.value;
 		
 		return null;
 	}
@@ -476,16 +477,51 @@ public class Quantity
 	}
 	
 	/**
+	 * This method is designed to help exponentiate the values in a specified
+	 * map.
+	 * @param pow		multiply key values by this amount	
+	 * @param map1		the specified map
+	 * @return
+	 */
+	private Map<String,Integer> expMap(int pow, Map<String,Integer> map1)
+	{
+		Map<String,Integer> copy1 = new HashMap<String,Integer>();
+		Map<String,Integer> toReturn  = new HashMap<String,Integer>();
+		Set<String> copy1KeySet;
+		int newValue;
+		// create a copy of map1
+		copy1.putAll(map1);
+		// generate key sets for each map to iterate over
+		copy1KeySet = copy1.keySet();
+		// iterate over the first set
+		Iterator<String> iter1 = copy1KeySet.iterator();
+		
+		// copy everything 
+		while(iter1.hasNext())
+		{
+			String tmpKey = iter1.next();
+			int tmpValue = copy1.get(tmpKey)*pow;
+			toReturn.put(tmpKey, tmpValue);
+			// remove the key from both list
+			iter1.remove();
+		}
+		
+		return toReturn;
+	}
+	
+	
+	/**
 	 * mini tests
 	 * @param args
 	 */
 	public static void main (String args[])
 	{
 		Quantity test = new Quantity(9.8, Arrays.asList("m", "s", "s"), Arrays.asList("m","s", "s"));
-		Quantity test2 = new Quantity(2, Arrays.asList("s", "s", "m"), Arrays.asList("m","s","s"));
+		Quantity test2 = new Quantity(2, Arrays.asList("m"), Arrays.asList("s","s"));
 		
 		//Quantity ans = test.mul(test2);
-		Quantity ans = test.div(test2);
+		//Quantity ans = test.div(test2);
+		Map<String, Integer> ans = test.expMap(3, test2.units);
 		
 		System.out.println(ans.toString());
 		//Quantity map1 = new Quantity(9.8, Arrays.asList("a", "b", "C","h", "m", "s"), Arrays.asList("p", "q", "a"));
