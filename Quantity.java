@@ -326,26 +326,16 @@ public class Quantity
 		
 		
 		// copy everything contained in both lists
-		for (int i = 0; iter1.hasNext(); ++i)
+		while(iter1.hasNext())
 		{
 			String tmpKey = iter1.next();
-			System.out.println(tmpKey);
 			int tmpValue = copy1.get(tmpKey);
 			// check if map2 contains tmpKey
 			if(copy2.containsKey(tmpKey))
 			{
-				System.out.println("copy2 contains: " + tmpKey+ " from copy1");
 				newValue = tmpValue + copy2.get(tmpKey);
-				System.out.println("new value for " +tmpKey + " is: " + newValue);
-				if (!(newValue == 0))
-				//{
+				if (!(newValue == 0)) // don't add any units that cancel out
 					map3.put(tmpKey, newValue);
-					// remove any units that cancel out
-					//copy1.remove(tmpKey);
-					//copy2.remove(tmpKey);
-				//}
-				//else
-					//map3.put(tmpKey, newValue);
 			}
 			else
 			{
@@ -355,16 +345,16 @@ public class Quantity
 			iter1.remove();
 			copy2KeySet.remove(tmpKey);	
 		}
-		Iterator<String> iter2 = copy2KeySet.iterator();
+		
 		// copy anything remaining in map2
-		for(int i = 0; iter2.hasNext(); ++i)
+		Iterator<String> iter2 = copy2KeySet.iterator();
+		while(iter2.hasNext())
 		{
 			String tmpKey = iter2.next();
 			int tmpValue = copy2.get(tmpKey);
 			map3.put(tmpKey, tmpValue);
 			copy2KeySet.remove(tmpKey);	
 		}
-		// remove any keys that map to 0
 		return map3;
 	}
 	
@@ -401,6 +391,7 @@ public class Quantity
 		map1.put("m",3);
 		map1.put("s",2);
 		map2.put("s", -2);
+		map2.put("m", -3);
 		
 		
 		System.out.println("map1: " + map1.entrySet().toString());
