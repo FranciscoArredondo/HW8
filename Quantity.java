@@ -8,6 +8,7 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -56,15 +57,16 @@ public class Quantity
 	}
 	
 	/**
-	 * This constructor takes in three parameters a double (the numeric value), 
+	 * <p>This constructor takes in three parameters a double (the numeric value), 
 	 * a List<String> of the units in the numerator (i.e., with positive 
 	 * exponents), and a List<String>of the units in the denominator 
-	 * (i.e., the units with negative exponents).
-	 * If either of the list arguments is null, this method should throw an 
-	 * IllegalArgumentException.
+	 * (i.e., the units with negative exponents).</p>
+	 * <p>If either of the list arguments is null, this method should throw an 
+	 * IllegalArgumentException.</p>
 	 * @param value		the numeric value
 	 * @param numer		the units in the numerator
 	 * @param denom		the units in the denominator
+	 * @throws IllegalArgumentException
 	 */
 	public Quantity(double value, List<String> numer, List<String> denom ) 
 			throws IllegalArgumentException
@@ -73,9 +75,8 @@ public class Quantity
 			throw new IllegalArgumentException();
 		
 		this.value = value;
-		this.units = new HashMap<String, Integer>();
+		this.units = new HashMap<String,Integer>();
 		unitsListToMap(numer, denom);
-		
 	}
 	
 	/**
@@ -266,9 +267,16 @@ public class Quantity
 	 */
 	public static Quantity normalizedUnit(String unitName, Map<String,Quantity> unitDataBase)
 	{
-		return null;
+		if (unitDataBase.containsKey(unitName))
+		{
+			Quantity toReturn = unitDataBase.get(unitName);
+			return toReturn;
+		}
+		else
+			return new Quantity (1, Arrays.asList(unitName), Collections.<String>emptyList());
 		
 	}
+	
 	
 	/**
 	 * <p>A (non-static) method normalize that takes in a database in the same 
@@ -281,7 +289,21 @@ public class Quantity
 	 */
 	public Quantity normalize(Map<String,Quantity>unitDataBase)
 	{
+		List<String> numer = getNumeratorUnits(this.units);
+		List<String> denom = getDenominatorUnits(this.units);
+		
 		return null;
+	}
+	
+	private void adjustExponentBy(String unitName,int delta)
+	{
+		if (!this.units.containsKey(unitName))
+			this.units.put(unitName, delta);
+		else
+			this.units.put(unitName, this.units.get(unitName)+delta);
+		
+		if (this.units.get(unitName) == 0)
+			this.units.remove(unitName);
 	}
 	
 	
@@ -347,14 +369,11 @@ public class Quantity
 		// create a copy of map1 and map2
 		copy1.putAll(map1);
 		copy2.putAll(map2);
-		// generate key sets for each map to iterate over
+		// generate key sets for the first map to iterate over
 		copy1KeySet = copy1.keySet();
-		copy2KeySet = copy2.keySet();
-		// iterate over the first of the two sets
+		// iterate over the first map
 		Iterator<String> iter1 = copy1KeySet.iterator();
-		
-		
-		// copy everything contained in both lists
+		// copy <key,values> that are contained in both maps
 		while(iter1.hasNext())
 		{
 			String tmpKey = iter1.next();
@@ -365,24 +384,23 @@ public class Quantity
 				newValue = tmpValue + copy2.get(tmpKey);
 				if (!(newValue == 0)) // don't add any units that cancel out
 					map3.put(tmpKey, newValue);
+				copy2.remove(tmpKey); // remove <tmpKey,value> from the second map
 			}
 			else
 			{
+				// <key,value> was only contained in first map copy to final map
 				map3.put(tmpKey, tmpValue);
 			}
-			// remove the key from both list
+			// remove the current key from first map
 			iter1.remove();
-			copy2KeySet.remove(tmpKey);	
 		}
 		
 		// copy anything remaining in map2
-		Iterator<String> iter2 = copy2KeySet.iterator();
-		while(iter2.hasNext())
+		copy2KeySet = copy2.keySet();
+		for (String key: copy2KeySet)
 		{
-			String tmpKey = iter2.next();
-			int tmpValue = copy2.get(tmpKey);
-			map3.put(tmpKey, tmpValue);
-			copy2KeySet.remove(tmpKey);	
+			int tmpValue = copy2.get(key);
+			map3.put(key, tmpValue);
 		}
 		return map3;
 	}
@@ -456,14 +474,12 @@ public class Quantity
 		// create a copy of map1 and map2
 		copy1.putAll(map1);
 		copy2.putAll(map2);
-		// generate key sets for each map to iterate over
+		// generate key sets for the first map to iterate over
 		copy1KeySet = copy1.keySet();
-		copy2KeySet = copy2.keySet();
 		// iterate over the first of the two sets
 		Iterator<String> iter1 = copy1KeySet.iterator();
 		
-		
-		// copy everything contained in both lists
+		// copy <key,values> that are contained in both maps
 		while(iter1.hasNext())
 		{
 			String tmpKey = iter1.next();
@@ -474,30 +490,26 @@ public class Quantity
 				newValue = tmpValue - copy2.get(tmpKey);
 				if (!(newValue == 0)) // don't add any units that cancel out
 					map3.put(tmpKey, newValue);
+				copy2.remove(tmpKey); // remove <tmpKey,value> from the second map
 			}
 			else
 			{
 				map3.put(tmpKey, tmpValue);
 			}
-			// remove the key from both list
+			// remove the key from the first map
 			iter1.remove();
-			copy2KeySet.remove(tmpKey);	
 		}
 		
 		// copy anything remaining in map2
-		Iterator<String> iter2 = copy2KeySet.iterator();
-		System.out.println("iter2 has next: " + iter2.hasNext());
-		System.out.println("KeySet2: " + copy2KeySet.toString());
-		while(iter2.hasNext())
+		copy2KeySet = copy2.keySet();
+		for (String key: copy2KeySet)
 		{
-			String tmpKey = iter2.next();
-			System.out.println("tmpKey: " + tmpKey);
-			int tmpValue = copy2.get(tmpKey);
-			map3.put(tmpKey, tmpValue);
-			copy2.remove(tmpKey);	
+			int tmpValue = copy2.get(key);
+			map3.put(key, -tmpValue);
 		}
 		return map3;
 	}
+	
 	
 	/**
 	 * This method is designed to help exponentiate the values in a specified
@@ -531,7 +543,8 @@ public class Quantity
 		return toReturn;
 	}
 	
-	private boolean equalUnits(Quantity quantity) //TODO:Remove this method if not used
+	
+	private void getInverse(Quantity quantity) //TODO:Remove this method if not used
 	{
 		return quantity.units.equals(this.units);
 	}
@@ -542,68 +555,51 @@ public class Quantity
 	 */
 	public static void main (String args[])
 	{
-		Quantity test = new Quantity(9.8, Arrays.asList("m","m", "s", "s"), Arrays.asList("m","s","s"));
-		Quantity test2 = new Quantity(2, Arrays.asList("m"), Arrays.asList("s","s"));
+		/*
+		// testing unitsListToMap()
+		Quantity value = new Quantity();
+		Map <String,Integer> units = new HashMap<String,Integer>();
+		List<String> numer = Arrays.asList("m");
+		List<String> denom = Arrays.asList("s");
+		value.unitsListToMap(numer, denom);
+		System.out.println(value.toString());
 		
-		Quantity quant1 = new Quantity(5, Arrays.asList("m"), Arrays.asList("s","s"));
-		Quantity quant2 = new Quantity(5, Arrays.asList("m"), Arrays.asList("s","s"));
-		
-		System.out.println(quant1.equals(test));
-		//Quantity ans = test.mul(test2);
-		//Quantity ans = test.div(test2);
-		Map<String, Integer> ans = test.expMap(3, test2.units);
-		
-		System.out.println(ans.toString());
-		//Quantity map1 = new Quantity(9.8, Arrays.asList("a", "b", "C","h", "m", "s"), Arrays.asList("p", "q", "a"));
-		//Quantity map2 = new Quantity(9.8, Arrays.asList("a", "x", "z", "m", "d"), Arrays.asList("m", "m", "s"));
-		
-		/*System.out.println(map1.units.entrySet().toString());
-		System.out.println(map2.units.entrySet().toString());
-		System.out.println("\nKey Sets: ");
-		System.out.println("map1: " + map1.units.keySet().toString());
-		System.out.println("map2: "+ map2.units.keySet().toString());
-		
-		Set<String> map1KeySet = map1.units.keySet();
-		map1KeySet.clear();
-		
-		System.out.println(map1.units.entrySet().toString());
-		System.out.println(map2.units.entrySet().toString());
-		System.out.println("\nKey Sets: ");
-		System.out.println("map1: " + map1.units.keySet().toString());
-		System.out.println("map2: "+ map2.units.keySet().toString());*/
+		// test addMaps()
+		System.out.println("\n\nTesting AddMaps():");
+		Quantity test1 = new Quantity();
+		Quantity test2 = new Quantity();
+		Map <String,Integer> map1 = new HashMap<String,Integer>();
+		Map <String,Integer> map2 = new HashMap<String,Integer>();
+		Map <String,Integer> map3;
+		List<String> numer1 = Arrays.asList("J", "s");
+		List<String> denom1 = Collections.<String>emptyList();
+		test1.unitsListToMap(numer, denom);
+		test2.unitsListToMap(numer1, denom1);
+		map3 = value.subMaps(test1.units, test2.units);
+		System.out.println(map3.toString());
+		*/
+		Quantity velocity = new Quantity(10, Arrays.asList("m"), Arrays.asList("s"));
+		Quantity plank = new Quantity(626, Arrays.asList("J", "s"), Arrays.asList(""));
 		
 		
-		/*Map<String, Integer> map1 = new HashMap<String, Integer>();
-		Map<String, Integer> map2 = new HashMap<String, Integer>();
-		map1.put("m",1);
-		map1.put("s",2);
-		map2.put("s",2);
-		map2.put("m",1);
+		Map<String,Quantity> db = new HashMap<String,Quantity>(); 
+		List<String> emp = new ArrayList<String>();
+		db.put("km", new Quantity(1000, Arrays.asList("meter"), emp)); 
+		db.put("day", new Quantity(24, Arrays.asList("hour"), emp)); 
+		db.put("hour", new Quantity(60, Arrays.asList("minute"), emp)); 
+		db.put("minute", new Quantity(60, Arrays.asList("second"), emp)); 
+		db.put("hertz", new Quantity(1, emp, Arrays.asList("second"))); 
+		db.put("kph", new Quantity(1, Arrays.asList("km"), Arrays.asList("hour")));
 		
+		Quantity test7 = Quantity.normalizedUnit("kph", db);
+		System.out.println(test7.toString());
 		
-		System.out.println("map1: " + map1.entrySet().toString());
-		System.out.println("map2: " + map2.entrySet().toString());
-		Map<String,Integer> map3 = test.subMaps(map1,map2);
-		System.out.println("map3: " + map3.entrySet().toString());
+		System.out.println("before" + velocity.toString());
+		velocity.adjustExponentBy("m", -1);
+		System.out.println("after" + velocity.toString());
 		
-		System.out.println(test.getDenominatorUnits(map3).toString());*/
 
 		
-		
-		/*System.out.println(test.units.entrySet().toString());
-		System.out.println(test2.units.entrySet().toString());
-		System.out.println("\nKey Sets: ");
-		System.out.println("test: " + test.units.keySet().toString());
-		System.out.println("test2: "+ test2.units.keySet().toString());
-		
-		Map<String, Integer> copy = new HashMap<String, Integer>();
-		copy.putAll(test.units);
-		System.out.println("copy: " + copy.entrySet().toString());
-		System.out.println("test: " + test.units.entrySet().toString());
-		
-		copy.clear();
-		System.out.println("copy: " + copy.entrySet().toString());
-		System.out.println("test: " + test.units.entrySet().toString());*/
 	}
 	
 	

@@ -9,10 +9,6 @@
 import junit.framework.TestCase;
 
 /**
- * 
- */
-
-/**
  * @author Francisco Arredondo
  * @author Michelle Arteaga
  *
@@ -24,7 +20,11 @@ public class ASTTester extends TestCase {
 	 */
 	protected void setUp() throws Exception 
 	{
-		super.setUp();
+	
+		Unicalc calc = new Unicalc();
+		calc.tokenize("3 + 5");
+		AST test = calc.parse();
+		double ans = test.eval();
 	}
 
 	/**
@@ -32,7 +32,8 @@ public class ASTTester extends TestCase {
 	 */
 	public void testProduct() 
 	{
-		fail("Not yet implemented"); // TODO
+		System.out.println()
+		//fail("Not yet implemented"); // TODO
 	}
 
 	/**

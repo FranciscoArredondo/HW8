@@ -7,7 +7,9 @@
  */
 
 import junit.framework.TestCase;
+
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author Francisco Arredondo
@@ -35,9 +37,9 @@ public class QuantityTester extends TestCase {
 		velocity2 = new Quantity(100, Arrays.asList("m"), Arrays.asList("s"));
 		sol = new Quantity(2.99, Arrays.asList("m"), Arrays.asList("s"));
 		solCopy = new Quantity(2.99, Arrays.asList("m"), Arrays.asList("s"));
-		plank = new Quantity(626, Arrays.asList("J", "s"), Arrays.asList(""));
-		plank2 = new Quantity(26, Arrays.asList("J", "s"), Arrays.asList(""));
-		avogado = new Quantity(602, Arrays.asList(""), Arrays.asList("mol"));
+		plank = new Quantity(626, Arrays.asList("J", "s"), Collections.<String>emptyList());
+		plank2 = new Quantity(26, Arrays.asList("J", "s"), Collections.<String>emptyList());
+		avogado = new Quantity(602, Collections.<String>emptyList(), Arrays.asList("mol"));
 	}
 
 	/**
@@ -98,11 +100,8 @@ public class QuantityTester extends TestCase {
 	public void testDiv() 
 	{
 		Quantity quotient = velocity.div(plank);
-		Quantity expected = new Quantity(0.6626, Arrays.asList("m"), Arrays.asList("J","s","s"));
-		//System.out.println(quotient.toString());
-		//System.out.println(expected.toString());
+		Quantity expected = new Quantity(0.01597, Arrays.asList("m"), Arrays.asList("J","s","s"));
 		assertEquals(expected,quotient);
-		//fail("Not yet implemented"); // TODO
 	}
 
 	/**
@@ -205,5 +204,12 @@ public class QuantityTester extends TestCase {
 	{
 		fail("Not yet implemented"); // TODO
 	}
+	
+	//////////////////////// Test for Helper Methods /////////////////////////
+	
+	/**
+	 * Test that units stored as Lists can be read into a map with the proper
+	 * exponent mappings.
+	 */
 
 }
