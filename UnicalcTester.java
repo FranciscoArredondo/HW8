@@ -6,6 +6,10 @@
  * May 23, 2014
  */
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 /**
@@ -15,12 +19,21 @@ import junit.framework.TestCase;
  */
 public class UnicalcTester extends TestCase {
 
+	// Instance Variables
+	ArrayList<String> emp;
+	Map<String,Quantity> env;
+	Unicalc calc;
+	Quantity ans;
+	AST test;
+	
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception 
 	{
-		super.setUp();
+		emp = new ArrayList<String>();
+		env = QuantityDB.getDB();
+		calc = new Unicalc();
 	}
 
 	/**
@@ -28,7 +41,13 @@ public class UnicalcTester extends TestCase {
 	 */
 	public void testS() 
 	{
-		fail("Not yet implemented"); // TODO
+		calc.tokenize("def smoot 10 meter");
+		AST s = calc.S();
+		Quantity q1 = new Quantity(10,emp,emp);
+		Quantity q2 = new Quantity(1,Arrays.asList("meter"),emp);
+		AST expected = new Define("smoot", new Product(new Value(q1),new Value(q2)));
+		
+		assertEquals(expected, s);
 	}
 
 	/**
@@ -36,7 +55,13 @@ public class UnicalcTester extends TestCase {
 	 */
 	public void testL() 
 	{
-		fail("Not yet implemented"); // TODO
+		calc.tokenize("# 17 kph");
+		AST l = calc.L();
+		Quantity q1 = new Quantity(17,emp,emp);
+		Quantity q2 = new Quantity(1,Arrays.asList("kph"),emp);
+		AST expected = new Normalize(new Product(new Value(q1),new Value(q2)));
+		
+		assertEquals(expected, l);
 	}
 
 	/**
@@ -44,7 +69,13 @@ public class UnicalcTester extends TestCase {
 	 */
 	public void testE() 
 	{
-		fail("Not yet implemented"); // TODO
+		calc.tokenize("10 + 19");
+		AST e = calc.E();
+		Quantity q1 = new Quantity(10,emp,emp);
+		Quantity q2 = new Quantity(19,emp,emp);
+		AST expected = new Sum(new Value(q1), new Value(q2));
+		
+		assertEquals(expected, e);
 	}
 
 	/**
@@ -52,7 +83,13 @@ public class UnicalcTester extends TestCase {
 	 */
 	public void testP() 
 	{
-		fail("Not yet implemented"); // TODO
+		calc.tokenize("105 / 5");
+		AST p = calc.P();
+		Quantity q1 = new Quantity(105,emp,emp);
+		Quantity q2 = new Quantity(5,emp,emp);
+		AST expected = new Quotient(new Value(q1), new Value(q2));
+		
+		assertEquals(expected, p);
 	}
 
 	/**
@@ -60,7 +97,12 @@ public class UnicalcTester extends TestCase {
 	 */
 	public void testK() 
 	{
-		fail("Not yet implemented"); // TODO
+		calc.tokenize("-15");
+		AST k = calc.K();
+		Quantity fifthteen = new Quantity(15,emp,emp);
+		AST expected = new Negation(new Value(fifthteen));
+		
+		assertEquals(expected, k);
 	}
 
 	/**
@@ -68,7 +110,13 @@ public class UnicalcTester extends TestCase {
 	 */
 	public void testQ() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity two = new Quantity(2,emp,emp);
+		Quantity four = new Quantity(4,emp,emp);
+		calc.tokenize("(2^4) (4^2)");
+		AST q = calc.Q();
+		AST expected = new Product(new Power(new Value(two),4), new Power(new Value(four),2));
+		
+		assertEquals(expected, q);
 	}
 
 	/**
@@ -76,39 +124,16 @@ public class UnicalcTester extends TestCase {
 	 */
 	public void testR() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity two = new Quantity(2,emp,emp);
+		calc.tokenize("2^3");
+		AST r = calc.R();
+		AST expected = new Power(new Value(two),3);
+		
+		assertEquals(expected,r);
 	}
 
-	/**
-	 * Test method for {@link Unicalc#V()}.
-	 */
-	public void testV() 
-	{
-		fail("Not yet implemented"); // TODO
-	}
 
-	/**
-	 * Test method for {@link Unicalc#J()}.
-	 */
-	public void testJ() 
-	{
-		fail("Not yet implemented"); // TODO
-	}
 
-	/**
-	 * Test method for {@link Unicalc#I()}.
-	 */
-	public void testI() 
-	{
-		fail("Not yet implemented"); // TODO
-	}
 
-	/**
-	 * Test method for {@link Unicalc#D()}.
-	 */
-	public void testD() 
-	{
-		fail("Not yet implemented"); // TODO
-	}
 
 }

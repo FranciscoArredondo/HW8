@@ -8,8 +8,12 @@
 
 import junit.framework.TestCase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Francisco Arredondo
@@ -26,6 +30,8 @@ public class QuantityTester extends TestCase {
 	Quantity plank;
 	Quantity plank2;
 	Quantity avogado;
+	Map<String,Quantity> db;
+	List<String> emp;
 	
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -40,6 +46,16 @@ public class QuantityTester extends TestCase {
 		plank = new Quantity(626, Arrays.asList("J", "s"), Collections.<String>emptyList());
 		plank2 = new Quantity(26, Arrays.asList("J", "s"), Collections.<String>emptyList());
 		avogado = new Quantity(602, Collections.<String>emptyList(), Arrays.asList("mol"));
+		
+		db = new HashMap<String,Quantity>();
+		emp = new ArrayList<String>();   
+
+		db.put("km", new Quantity(1000, Arrays.asList("meter"), emp));
+		db.put("day", new Quantity(24, Arrays.asList("hour"), emp));
+		db.put("hour", new Quantity(60, Arrays.asList("minute"), emp));
+		db.put("minute", new Quantity(60, Arrays.asList("second"), emp));
+		db.put("hertz", new Quantity(1, emp, Arrays.asList("second")));
+		db.put("kph", new Quantity(1, Arrays.asList("km"), Arrays.asList("hour")));
 	}
 
 	/**
@@ -132,6 +148,7 @@ public class QuantityTester extends TestCase {
 	{
 		try
 		{
+			@SuppressWarnings("unused")
 			Quantity sum = velocity.add(gravity);
 			fail("Should have thrown an IllegalArgumentException.");
 		}
@@ -147,7 +164,7 @@ public class QuantityTester extends TestCase {
 	public void testSub() 
 	{
 		Quantity diff = plank.sub(plank2);
-		Quantity expected = new Quantity(600, Arrays.asList("J","s"), Arrays.asList(""));
+		Quantity expected = new Quantity(600, Arrays.asList("J","s"), emp);
 		assertEquals(expected, diff);
 	}
 	
@@ -159,6 +176,7 @@ public class QuantityTester extends TestCase {
 	{
 		try
 		{
+			@SuppressWarnings("unused")
 			Quantity diff = velocity.sub(gravity);
 			fail("Should have thrown an IllegalArgumentException.");
 		}
@@ -194,7 +212,14 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testNormalizedUnit() 
 	{
-		fail("Not yet implemented"); // TODO
+		Quantity test = Quantity.normalizedUnit("hour", db);
+		Quantity expected = new Quantity(3600, Arrays.asList("second"), emp);
+
+		Quantity test2 = Quantity.normalizedUnit("km", db);
+		Quantity expected2 = new Quantity(1000, Arrays.asList("meter"), emp);
+
+		assertEquals(expected.toString(), test.toString());
+		assertEquals(expected2.toString(), test2.toString());
 	}
 
 	/**
@@ -202,14 +227,18 @@ public class QuantityTester extends TestCase {
 	 */
 	public void testNormalize() 
 	{
-		fail("Not yet implemented"); // TODO
+		Map<String,Quantity> db = new HashMap<String,Quantity>();
+		List<String> emp = new ArrayList<String>();
+
+		db.put("hour", new Quantity(60, Arrays.asList("minute"), emp));
+		db.put("minute", new Quantity(60, Arrays.asList("second"), emp));
+
+
+		Quantity quantity = new Quantity(20, Arrays.asList("hour"), emp);
+		Quantity test = quantity.normalize(db);
+		Quantity expected = new Quantity(72000, Arrays.asList("second"), emp);
+
+		assertEquals(expected, test);
 	}
-	
-	//////////////////////// Test for Helper Methods /////////////////////////
-	
-	/**
-	 * Test that units stored as Lists can be read into a map with the proper
-	 * exponent mappings.
-	 */
 
 }
