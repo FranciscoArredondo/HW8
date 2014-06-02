@@ -76,7 +76,7 @@ public class QuantityTester extends TestCase {
 	/**
 	 * Test method for {@link Quantity#Quantity()}.
 	 */
-	public void testQuantity() 
+	public void testQuantity()
 	{
 		Quantity test = new Quantity();
 		assertEquals("1.0", test.toString());

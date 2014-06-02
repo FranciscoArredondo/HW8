@@ -12,7 +12,7 @@ class QuantityDB {
   static Map<String,Quantity> getDB()
   {
     List<String> emp = Collections.<String>emptyList();
-        
+    
     Map<String,Quantity> db = new HashMap<String,Quantity>();
     db.put("A", new Quantity(1.0, Arrays.asList("ampere"), Collections.<String>emptyList()));
     db.put("amp", new Quantity(1.0, Arrays.asList("ampere"), Collections.<String>emptyList()));

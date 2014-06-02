@@ -8,6 +8,7 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,18 +19,17 @@ import java.util.Set; // remove later
 import java.util.TreeSet;
 import java.text.DecimalFormat;
 
-
-
 /**
  * @author Francisco Arredondo
  * @author Michelle Arteaga
- *
  */
+
 public class Quantity 
 {
-	// instance variables //TODO: Change back to private
-	public double value;
-	public Map<String,Integer> units;
+	// instance variables
+	private double value;
+	private Map<String,Integer> units;
+	private Set<String> keys;
 	
 	/**
 	 * zero-argument constructor that creates a default quantity of value 1 and
@@ -39,6 +39,7 @@ public class Quantity
 	{
 		value = 1;
 		units = new HashMap<String, Integer>();
+		keys = units.keySet();
 	}
 	
 	/**
@@ -51,9 +52,12 @@ public class Quantity
 	public Quantity(Quantity toCopy)
 	{
 		//TODO: May need to check this for correctness with a tutor.
-		value = toCopy.value;
-		units = toCopy.units; // Unsure if this is how the map object should be 
-							  // copied. 
+		Map<String,Integer> newUnits = new HashMap<String,Integer>();
+		newUnits.putAll(toCopy.units);
+		
+		this.value = toCopy.value;
+		this.units = newUnits;
+		//this.keys = this.units.keySet();
 	}
 	
 	/**
@@ -77,6 +81,7 @@ public class Quantity
 		this.value = value;
 		this.units = new HashMap<String,Integer>();
 		unitsListToMap(numer, denom);
+		this.keys = this.units.keySet();
 	}
 	
 	/**
@@ -93,10 +98,12 @@ public class Quantity
 			throw new IllegalArgumentException();
 		
 		double product = this.value * quantity.value;
+		//add the exponents of the units and store them into a new hashmap
 		Map<String,Integer> newUnits = addMaps(this.units, quantity.units);
+		//generate list of the units in the numerator and denominator
 		List<String> numer = getNumeratorUnits(newUnits);
 		List<String> denom = getDenominatorUnits(newUnits);
-		
+		//return the product as a quantity object
 		return new Quantity(product, numer, denom);
 	}
 	
@@ -114,10 +121,12 @@ public class Quantity
 			throw new IllegalArgumentException();
 		
 		double quotient = this.value/divisor.value;
+		//subtract the exponents of the units
 		Map<String,Integer> newUnits = subMaps(this.units, divisor.units);
+		//generate list of the units in the numerator and denominator
 		List<String> numer = getNumeratorUnits(newUnits);
 		List<String> denom = getDenominatorUnits(newUnits);
-		
+		//return the product as a quantity object
 		return new Quantity(quotient, numer, denom);
 	}
 	
@@ -130,10 +139,12 @@ public class Quantity
 	public Quantity pow(int power)
 	{
 		double newValue = Math.pow(value, power);
+		//multiply the exponents of the units by an integer and store into a new map.
 		Map<String,Integer> newUnits = expMap(power,this.units);
+		//generate list of the units in the numerator and denominator
 		List<String> numer = getNumeratorUnits(newUnits);
 		List<String> denom = getDenominatorUnits(newUnits);
-		
+		//return the result in the form of a quantity object
 		return new Quantity(newValue, numer, denom);
 	}
 	
@@ -147,15 +158,16 @@ public class Quantity
 	 */
 	public Quantity add(Quantity quantity)
 	{
+		//check that the units of the operands are equal
 		if(quantity == null || !quantity.units.equals(this.units))
 			throw new IllegalArgumentException();
 		double sum = this.value + quantity.value;
+		//generate list of the units in the numerator and denominator
 		List<String> numer = getNumeratorUnits(this.units);
 		List<String> denom = getDenominatorUnits(this.units);
-		
+		//return the sum as a new quantity object
 		return new Quantity(sum, numer, denom);
 	}
-	
 	
 	/**
 	 * A method sub that takes a single Quantity argument, subtracts it from 
@@ -163,31 +175,34 @@ public class Quantity
 	 * This method should throw an IllegalArgumentException if its argument is 
 	 * null or if the two Quantity objects do not have the same units.
 	 * 
-	 * @param quantity
-	 * @return
+	 * @param quantity		the quantity to subtract from the calling quantity
+	 * @return				the result in a Quantity form
 	 */
 	public Quantity sub(Quantity quantity)
 	{
+		//check that the units of the operands are equal
 		if(quantity == null || !quantity.units.equals(this.units))
 			throw new IllegalArgumentException();
 		double diff = this.value - quantity.value;
+		//generate list of the units in the numerator and denominator
 		List<String> numer = getNumeratorUnits(this.units);
 		List<String> denom = getDenominatorUnits(this.units);
-		
+		//return the difference as a new quantity object
 		return new Quantity(diff, numer, denom);
 	}
 	
 	/**
 	 * A method negate that takes no arguments and returns a new Quantity which 
-	 * is the negation of this Quantity.
+	 * is the negation of the calling Quantity object.
 	 * @return		the negation of the calling quantity
 	 */
 	public Quantity negate()
 	{
 		double neg = -(this.value);
+		//generate list of the units in the numerator and denominator
 		List<String> numer = getNumeratorUnits(this.units);
 		List<String> denom = getDenominatorUnits(this.units);
-		
+		//return the negation as a new quantity object
 		return new Quantity(neg, numer, denom);
 	}
 	
@@ -199,7 +214,6 @@ public class Quantity
 	@Override
 	public String toString()
 	{
-		// XXX You will need to fix these lines to match your fields! 
 		double valueOfTheQuantity = this.value; 
 		Map<String,Integer> mapOfTheQuantity = this.units;
 		// Ensure we get the units in order 
@@ -207,7 +221,8 @@ public class Quantity
 		StringBuffer unitsString = new StringBuffer();
 		for (String key : orderedUnits) 
 		{
-			int expt = mapOfTheQuantity.get(key); unitsString.append(" " + key);
+			int expt = mapOfTheQuantity.get(key); 
+			unitsString.append(" " + key);
 			if (expt != 1)
 				unitsString.append("^" + expt);
 		}
@@ -217,7 +232,6 @@ public class Quantity
 		// Put it all together and return. 
 		return df.format(valueOfTheQuantity) + unitsString.toString();
 	}
-	
 	
 	/**
 	 * A boolean method equals that takes any single Object, and returns true 
@@ -231,12 +245,14 @@ public class Quantity
 	@Override
 	public boolean equals(Object quantity)
 	{
-		if (!(quantity instanceof Quantity)|| !((Quantity)quantity).units.equals(this.units))
+		//check that quantity is of of type Quantity and that the units are equal
+		if (!(quantity instanceof Quantity)|| 
+			!( (Quantity) quantity).units.equals(this.units))
 			return false;
-		
+		//create string representations of the two quantity objects
 		String string1 = this.toString();
 		String string2 = quantity.toString();
-		
+		//compare their string representations
 		return string1.equals(string2);
 	}
 	
@@ -267,16 +283,16 @@ public class Quantity
 	 */
 	public static Quantity normalizedUnit(String unitName, Map<String,Quantity> unitDataBase)
 	{
+		//if database contains unit key then the units can still be normalized
 		if (unitDataBase.containsKey(unitName))
 		{
 			Quantity toReturn = unitDataBase.get(unitName);
-			return toReturn;
+			return toReturn.normalize(unitDataBase);
 		}
 		else
+			//units were not found in the database
 			return new Quantity (1, Arrays.asList(unitName), Collections.<String>emptyList());
-		
 	}
-	
 	
 	/**
 	 * <p>A (non-static) method normalize that takes in a database in the same 
@@ -289,13 +305,13 @@ public class Quantity
 	 */
 	public Quantity normalize(Map<String,Quantity>unitDataBase)
 	{
-		List<String> numer = getNumeratorUnits(this.units);
-		List<String> denom = getDenominatorUnits(this.units);
-		
-		return null;
+		Quantity quant = new Quantity(this.value,Collections.<String>emptyList(), Collections.<String>emptyList());
+		for (String str: this.keys)
+			quant = quant.mul(Quantity.normalizedUnit(str, unitDataBase).pow(this.units.get(str)));
+		return quant;
 	}
 	
-	private void adjustExponentBy(String unitName,int delta)
+	private void adjustExponentBy(String unitName,int delta) //TODO: Remove before submitting
 	{
 		if (!this.units.containsKey(unitName))
 			this.units.put(unitName, delta);
@@ -307,11 +323,25 @@ public class Quantity
 	}
 	
 	
+	private Quantity normRec(Map<String,Quantity> dataBase, Iterator <Map.Entry<String, Quantity>> iter) //TODO: Remove before submitting
+	{
+		if (!iter.hasNext())
+			return null;
+		Map.Entry<String, Quantity> tmpEntry = iter.next();
+		
+		if (dataBase.containsKey(tmpEntry.getKey()))
+		{
+			return this.mul(Quantity.normalizedUnit(tmpEntry.getKey(), dataBase));
+		}
+		return null;
+	}
+	
+	
 	//////////////////////// Private Helper Methods //////////////////////////
 	
 	/**
 	 * This method is designed to read in the units from a List<String> and 
-	 * store its non-zero exponent to the units map.
+	 * store its non-zero exponents to the units map.
 	 * @param numerator			the units in the numerator
 	 * @param denominator		the units in the denominator
 	 */
@@ -329,7 +359,6 @@ public class Quantity
 			}
 				
 		}
-		
 		// adding denominator units
 				for (int i = 0, count = 0; i < denominator.size(); ++i)
 				{
@@ -345,18 +374,18 @@ public class Quantity
 					{
 						count = 0;
 						units.put(denominator.get(i), --count);
-					}
-					
-						
+					}	
 				}
 	}
 	
 	/**
-	 * This method is designed to take in two maps and add all their keys into
+	 * This method is designed to take in two maps and copy all their keys into
 	 * a new map, any values associated with keys contained in both maps will
-	 * be added together.
-	 * @param map1
-	 * @param map2
+	 * be added together. This method is used to aid in the multiplication of
+	 * quantities with units.
+	 * @param map1			the hashmap of units for the first quantity
+	 * @param map2			the hashmap of units for the second quantity
+	 * @return				the sum of the two specified maps
 	 */
 	private Map<String,Integer> addMaps(Map<String,Integer> map1, Map<String,Integer> map2)
 	{
@@ -407,9 +436,9 @@ public class Quantity
 	
 	/**
 	 * This method is designed to retrieve the units of the numerator from a 
-	 * specified map, and return them as a list.
-	 * @param map
-	 * @return
+	 * specified map, and return them as an ArrayList.
+	 * @param map		the specified map to retrieve the units with positive exponents
+	 * @return			the units in the form of an arrayList
 	 */
 	private List<String> getNumeratorUnits(Map<String,Integer> map)
 	{
@@ -433,8 +462,8 @@ public class Quantity
 	/**
 	 * This method is designed to retrieve the units of the denominator from a 
 	 * specified map, and return them as a list.
-	 * @param map
-	 * @return
+	 * @param map		the specified map to retrieve the units with negative exponents
+	 * @return			the units in the form of an arrayList
 	 */
 	private List<String> getDenominatorUnits(Map<String,Integer> map)
 	{
@@ -456,12 +485,12 @@ public class Quantity
 	}
 	
 	/**
-	 * This method is designed to take in two maps and subtract all their keys 
+	 * This method is designed to take in two maps and copy all their keys 
 	 * into a new map, any values associated with keys contained in both maps 
 	 * will be subtracted from one another.
-	 * @param map1
-	 * @param map2
-	 * @return
+	 * @param map1		the hashmap of units for the first quantity
+	 * @param map2		the hashmap of units for the second quantity
+	 * @return			the difference of the two specified maps
 	 */
 	private Map<String,Integer> subMaps(Map<String,Integer> map1, Map<String,Integer> map2)
 	{
@@ -510,24 +539,24 @@ public class Quantity
 		return map3;
 	}
 	
-	
 	/**
-	 * This method is designed to help exponentiate the values in a specified
-	 * map.
+	 * This method is designed to help exponentiation of quantities with units.
+	 * It will take in the specified exponent to raise each unit by.
 	 * @param pow		multiply key values by this amount	
 	 * @param map1		the specified map
-	 * @return
+	 * @return			the result of exponentiation of the specified units map 
 	 */
 	private Map<String,Integer> expMap(int pow, Map<String,Integer> map1)
 	{
 		Map<String,Integer> copy1 = new HashMap<String,Integer>();
 		Map<String,Integer> toReturn  = new HashMap<String,Integer>();
 		Set<String> copy1KeySet;
+		
 		// create a copy of map1
 		copy1.putAll(map1);
 		// generate key sets for each map to iterate over
 		copy1KeySet = copy1.keySet();
-		// iterate over the first set
+		// iterate over the set of keys
 		Iterator<String> iter1 = copy1KeySet.iterator();
 		
 		// copy everything 
@@ -539,67 +568,22 @@ public class Quantity
 			// remove the key from both list
 			iter1.remove();
 		}
-		
 		return toReturn;
 	}
 	
 	
 	private void getInverse(Quantity quantity) //TODO:Remove this method if not used
 	{
-		return quantity.units.equals(this.units);
+		//quantity.units.equals(this.units);
 	}
 	
 	/**
 	 * mini tests
 	 * @param args
 	 */
-	public static void main (String args[])
+	public static void main (String args[])//TODO:Remove this method if not used
 	{
-		/*
-		// testing unitsListToMap()
-		Quantity value = new Quantity();
-		Map <String,Integer> units = new HashMap<String,Integer>();
-		List<String> numer = Arrays.asList("m");
-		List<String> denom = Arrays.asList("s");
-		value.unitsListToMap(numer, denom);
-		System.out.println(value.toString());
-		
-		// test addMaps()
-		System.out.println("\n\nTesting AddMaps():");
-		Quantity test1 = new Quantity();
-		Quantity test2 = new Quantity();
-		Map <String,Integer> map1 = new HashMap<String,Integer>();
-		Map <String,Integer> map2 = new HashMap<String,Integer>();
-		Map <String,Integer> map3;
-		List<String> numer1 = Arrays.asList("J", "s");
-		List<String> denom1 = Collections.<String>emptyList();
-		test1.unitsListToMap(numer, denom);
-		test2.unitsListToMap(numer1, denom1);
-		map3 = value.subMaps(test1.units, test2.units);
-		System.out.println(map3.toString());
-		*/
-		Quantity velocity = new Quantity(10, Arrays.asList("m"), Arrays.asList("s"));
-		Quantity plank = new Quantity(626, Arrays.asList("J", "s"), Arrays.asList(""));
-		
-		
-		Map<String,Quantity> db = new HashMap<String,Quantity>(); 
 		List<String> emp = new ArrayList<String>();
-		db.put("km", new Quantity(1000, Arrays.asList("meter"), emp)); 
-		db.put("day", new Quantity(24, Arrays.asList("hour"), emp)); 
-		db.put("hour", new Quantity(60, Arrays.asList("minute"), emp)); 
-		db.put("minute", new Quantity(60, Arrays.asList("second"), emp)); 
-		db.put("hertz", new Quantity(1, emp, Arrays.asList("second"))); 
-		db.put("kph", new Quantity(1, Arrays.asList("km"), Arrays.asList("hour")));
-		
-		Quantity test7 = Quantity.normalizedUnit("kph", db);
-		System.out.println(test7.toString());
-		
-		System.out.println("before" + velocity.toString());
-		velocity.adjustExponentBy("m", -1);
-		System.out.println("after" + velocity.toString());
-		
-
-		
 	}
 	
 	
